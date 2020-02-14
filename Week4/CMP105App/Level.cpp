@@ -1,4 +1,6 @@
 #include "Level.h"
+#include "Player.h"
+#include "Enemy.h"
 
 Level::Level(sf::RenderWindow* hwnd, Input* in)
 {
@@ -6,11 +8,19 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 
 	// initialise game objects
-	texture.loadFromFile("gfx/Mushroom.png");
+	playerTexture.loadFromFile("gfx/Mushroom.png");
 
-	testSprite.setTexture(&texture);
-	testSprite.setSize(sf::Vector2f(100, 100));
-	testSprite.setPosition(100, 100);
+	player.setTexture(&playerTexture);
+	player.setSize(sf::Vector2f(100, 100));
+	player.setPosition(100, 100);
+	player.setInput(input);
+
+	enemyTexture.loadFromFile("gfx/Goomba.png");
+
+	enemy = Enemy(window);
+	enemy.setTexture(&enemyTexture);
+	enemy.setSize(sf::Vector2f(50, 50));
+	enemy.setPosition(50, 50);
 
 }
 
@@ -33,7 +43,8 @@ void Level::handleInput(float dt)
 // Update game objects
 void Level::update(float dt)
 {
-	
+	player.handleInput(dt);
+	enemy.update(dt);
 }
 
 // Render level
@@ -41,7 +52,8 @@ void Level::render()
 {
 	beginDraw();
 
-	window->draw(testSprite);
+	window->draw(player);
+	window-> draw(enemy);
 
 	endDraw();
 }
